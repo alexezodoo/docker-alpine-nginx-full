@@ -26,9 +26,9 @@ pipeline {
 					steps {
 						script {
 							env.BASE_TAG                = 'latest'
-							env.BUILDX_PUSH_TAGS        = "-t docker.io/jc21/${IMAGE}:${BASE_TAG}"
-							env.BUILDX_PUSH_TAGS_NODE   = "-t docker.io/jc21/${IMAGE}:node"
-							env.BUILDX_PUSH_TAGS_GOLANG = "-t docker.io/jc21/${IMAGE}:golang"
+							env.BUILDX_PUSH_TAGS        = "-t docker.io/ezodoo/${IMAGE}:${BASE_TAG}"
+							env.BUILDX_PUSH_TAGS_NODE   = "-t docker.io/ezodoo/${IMAGE}:node"
+							env.BUILDX_PUSH_TAGS_GOLANG = "-t docker.io/ezodoo/${IMAGE}:golang"
 						}
 					}
 				}
@@ -42,7 +42,7 @@ pipeline {
 						script {
 							// Defaults to the Branch name, which is applies to all branches AND pr's
 							env.BASE_TAG                = "github-${BRANCH_LOWER}"
-							env.BUILDX_PUSH_TAGS        = "-t docker.io/jc21/${IMAGE}:${BASE_TAG}"
+							env.BUILDX_PUSH_TAGS        = "-t docker.io/ezodoo/${IMAGE}:${BASE_TAG}"
 							env.BUILDX_PUSH_TAGS_NODE   = "${BUILDX_PUSH_TAGS}-node"
 							env.BUILDX_PUSH_TAGS_GOLANG = "${BUILDX_PUSH_TAGS}-golang"
 						}
@@ -55,7 +55,7 @@ pipeline {
 				BUILDX_NAME = "${IMAGE}_${GIT_BRANCH}_base"
 			}
 			steps {
-				withCredentials([usernamePassword(credentialsId: 'jc21-dockerhub', passwordVariable: 'dpass', usernameVariable: 'duser')]) {
+				withCredentials([usernamePassword(credentialsId: 'ezodoo-dockerhub', passwordVariable: 'dpass', usernameVariable: 'duser')]) {
 					sh "docker login -u '${duser}' -p '${dpass}'"
 					sh "./scripts/buildx --push ${BUILDX_PUSH_TAGS}"
 				}
@@ -100,7 +100,7 @@ pipeline {
 			}
 			steps {
 				script {
-					def comment = pullRequest.comment("""Docker Image for build ${BUILD_NUMBER} is available on [DockerHub](https://cloud.docker.com/repository/docker/jc21/${IMAGE}) as:
+					def comment = pullRequest.comment("""Docker Image for build ${BUILD_NUMBER} is available on [DockerHub](https://cloud.docker.com/repository/docker/ezodoo/${IMAGE}) as:
 
 - `jc21/${IMAGE}:github-${BRANCH_LOWER}`
 - `jc21/${IMAGE}:github-${BRANCH_LOWER}-node`
